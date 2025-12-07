@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IVF Clinic Dashboard - Empowering Fertility Care</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8BA888;
+            --primary-dark: #6e8a6b;
+            --secondary: #6B9B9E;
+            --accent: #575756;
+            --background: #f8fafc;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-dark);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Utility */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 28px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(139, 168, 136, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(139, 168, 136, 0.6);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            margin-left: 16px;
+        }
+
+        .btn-secondary:hover {
+            background-color: rgba(139, 168, 136, 0.1);
+        }
+
+        /* Navbar */
+        nav {
+            padding: 24px 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            background: rgba(248, 250, 252, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logo-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            border-radius: 8px;
+            border-bottom-right-radius: 0;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            margin-left: 32px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 160px 0 100px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(139, 168, 136, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(107, 155, 158, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            z-index: -1;
+        }
+
+        .hero h1 {
+            font-size: 56px;
+            line-height: 1.1;
+            margin-bottom: 24px;
+            color: var(--text-dark);
+            letter-spacing: -1px;
+        }
+
+        .hero h1 span {
+            color: var(--primary);
+        }
+
+        .hero p {
+            font-size: 20px;
+            color: var(--text-light);
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .hero-image-container {
+            margin-top: 60px;
+            position: relative;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            border: 8px solid rgba(255, 255, 255, 0.8);
+            background: white;
+            aspect-ratio: 16/9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #f0f4f8 0%, #e2e8f0 100%);
+        }
+
+        .mock-dashboard {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            grid-template-rows: 60px 1fr;
+        }
+
+        .mock-sidebar {
+            grid-row: 1 / -1;
+            background: #fff;
+            border-right: 1px solid #e2e8f0;
+            padding: 20px;
+        }
+
+        .mock-nav-item {
+            height: 12px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            width: 80%;
+        }
+
+        .mock-nav-item.active {
+            background: var(--primary);
+            width: 100%;
+            opacity: 0.2;
+        }
+
+        .mock-header {
+            background: #fff;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            padding: 0 24px;
+        }
+
+        .mock-content {
+            background: #f8fafc;
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            grid-template-rows: auto 1fr;
+        }
+
+        .mock-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .mock-card.large {
+            grid-column: span 2;
+            height: 300px;
+        }
+
+        .mock-card.small {
+            height: 120px;
+        }
+
+        .mock-chart {
+            width: 100%;
+            height: 80%;
+            background: repeating-linear-gradient(45deg, #f1f5f9, #f1f5f9 10px, #e2e8f0 10px, #e2e8f0 20px);
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        /* Features */
+        .features {
+            padding: 100px 0;
+            background: #fff;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            text-transform: uppercase;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 14px;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .section-title {
+            font-size: 36px;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .feature-card {
+            padding: 32px;
+            border-radius: 24px;
+            background: var(--background);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            background: #fff;
+        }
+
+        .feature-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(139, 168, 136, 0.15);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        .feature-card h3 {
+            font-size: 24px;
+            margin-bottom: 12px;
+            color: var(--text-dark);
+        }
+
+        .feature-card p {
+            color: var(--text-light);
+            font-size: 16px;
+        }
+
+        /* How it works */
+        .workflow {
+            padding: 100px 0;
+        }
+
+        .workflow-step {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            margin-bottom: 80px;
+        }
+
+        .workflow-step:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-image {
+            flex: 1;
+            height: 300px;
+            background: #e2e8f0;
+            border-radius: 24px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 80px;
+            font-weight: 900;
+            color: rgba(139, 168, 136, 0.2);
+            position: absolute;
+            top: -40px;
+            left: -20px;
+        }
+
+        /* CTA */
+        .cta-section {
+            padding: 100px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 32px;
+            margin: 0 24px 60px;
+        }
+
+        .cta-section h2 {
+            font-size: 42px;
+            margin-bottom: 24px;
+        }
+
+        .cta-section .btn-secondary {
+            border-color: white;
+            color: white;
+        }
+
+        .cta-section .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-section .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: white;
+            padding: 80px 0 40px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 24px;
+            color: var(--primary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            color: #64748b;
+            padding-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 40px;
+            }
+
+            .workflow-step {
+                flex-direction: column !important;
+                gap: 40px;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mock-dashboard {
+                grid-template-columns: 60px 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="container nav-content">
+            <div class="logo">
+                <div class="logo-icon"></div>
+                IVF Companion
+            </div>
+            <div class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#benefits">Benefits</a>
+                <a href="#demo">Request Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Advanced Care, <br><span>Seamlessly Managed.</span></h1>
+            <p>The all-in-one dashboard designed for modern IVF clinics. Streamline protocols, patient communication,
+                and analytics in one beautiful interface.</p>
+            <div class="hero-actions">
+                <a href="#" class="btn btn-primary">Get Started</a>
+                <a href="#" class="btn btn-secondary">Watch Demo</a>
+            </div>
+
+            <div class="hero-image-container">
+                <!-- CSS Mockup -->
+                <div class="mock-dashboard">
+                    <div class="mock-sidebar">
+                        <div class="mock-nav-item active"></div>
+                        <div class="mock-nav-item"></div>
+                        <div class="mock-nav-item"></div>
+                    </div>
+                    <div class="mock-header">
+                        <div style="width: 150px; height: 10px; background: #e2e8f0; border-radius: 5px;"></div>
+                    </div>
+                    <div class="mock-content">
+                        <div class="mock-card small">
+                            <div style="font-weight: bold; color: #1e293b; margin-bottom: 8px;">Success Rate</div>
+                            <div style="font-size: 24px; color: #8BA888;">65%</div>
+                        </div>
+                        <div class="mock-card small">
+                            <div style="font-weight: bold; color: #1e293b; margin-bottom: 8px;">Appointments</div>
+                            <div style="font-size: 24px; color: #6B9B9E;">12 Today</div>
+                        </div>
+                        <div class="mock-card small">
+                            <div style="font-weight: bold; color: #1e293b; margin-bottom: 8px;">Pending</div>
+                            <div style="font-size: 24px; color: #575756;">8 Results</div>
+                        </div>
+                        <div class="mock-card large">
+                            <div style="font-weight: bold; color: #1e293b;">Patient Growth</div>
+                            <div class="mock-chart"></div>
+                        </div>
+                        <div class="mock-card" style="grid-column: span 1;">
+                            <div style="font-weight: bold; color: #1e293b; margin-bottom: 16px;">Notifications</div>
+                            <div style="height: 10px; background: #f1f5f9; width: 100%; margin-bottom: 8px;"></div>
+                            <div style="height: 10px; background: #f1f5f9; width: 80%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Features</span>
+                <h2 class="section-title">Everything you need to excel</h2>
+                <p style="color: var(--text-light);">Tools designed specifically for fertility specialists.</p>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <h3>Patient Management</h3>
+                    <p>Keep track of patient journeys, from initial consultation to successful outcomes. View medical
+                        history, treatment status, and next steps at a glance.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                        </svg>
+                    </div>
+                    <h3>Protocol Library</h3>
+                    <p>Access customizable treatment protocols. Create templates for IVF, ICSI, and IUI, and adapt them
+                        to individual patient needs swiftly.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                        </svg>
+                    </div>
+                    <h3>Smart Scheduling</h3>
+                    <p>Manage appointments with an intelligent calendar that syncs with patient protocols, ensuring no
+                        critical step is missed.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="workflow" id="benefits">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Workflow</span>
+                <h2 class="section-title">Designed for Efficiency</h2>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-content">
+                    <h3>1. Organize Patient Data</h3>
+                    <p>Centralize all patient information. With out intuitive dashboard, finding lab results and history
+                        takes seconds, not minutes.</p>
+                    <ul style="margin-top: 16px; color: var(--text-light); list-style: none;">
+                        <li style="margin-bottom: 8px;">✓ Unified Health Records</li>
+                        <li>✓ Secure & Private</li>
+                    </ul>
+                </div>
+                <div class="step-image">
+                    <div class="step-number">01</div>
+                    <div style="text-align: center; color: #64748b;">[Patient Profile Interface]</div>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-content">
+                    <h3>2. Communicate Instantly</h3>
+                    <p>Reach out to patients directly through the integrated messenger. Send updates, reminders, and
+                        answer queries in real-time.</p>
+                </div>
+                <div class="step-image">
+                    <div class="step-number">02</div>
+                    <div style="text-align: center; color: #64748b;">[Messenger Interface]</div>
+                </div>
+            </div>
+
+            <div class="workflow-step">
+                <div class="step-content">
+                    <h3>3. Analyze & Improve</h3>
+                    <p>Leverage data analytics to track success rates by age group, treatment type, and more. Make
+                        data-driven decisions to improve clinic performance.</p>
+                </div>
+                <div class="step-image">
+                    <div class="step-number">03</div>
+                    <div style="text-align: center; color: #64748b;">[Analytics Graphs]</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <section class="cta-section">
+            <h2>Ready to transform your clinic?</h2>
+            <p style="margin-bottom: 32px; opacity: 0.9;">Join leading IVF specialists who trust IVF Companion.</p>
+            <a href="#" class="btn btn-primary">Schedule a Demo</a>
+            <a href="#" class="btn btn-secondary">Contact Sales</a>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <div class="logo" style="margin-bottom: 16px;">
+                        <div class="logo-icon"></div>
+                        IVF Companion
+                    </div>
+                    <p style="color: #94a3b8; font-size: 14px;">Advancing fertility care through innovative technology
+                        and seamless management solutions.</p>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#">Features</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Case Studies</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2025 IVF Companion. All rights reserved.
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

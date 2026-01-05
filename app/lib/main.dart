@@ -28,53 +28,48 @@ class MyApp extends StatelessWidget {
       title: 'IVF Clinic Dashboard',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF8BA888), // Sage Green
-        scaffoldBackgroundColor: const Color(0xFFF8F6F3), // Warm White
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF8BA888),
-          primary: const Color(0xFF8BA888),
-          secondary: const Color(0xFF6B9B9E), // Teal
-          background: const Color(0xFFF8F6F3),
+        useMaterial3: false,
+        scaffoldBackgroundColor: const Color(0xFFF8F6F3),
+        primaryColor: const Color(0xFF8BA888),
+        colorScheme: const ColorScheme.light(
+          primary: Color(0xFF8BA888),
+          secondary: Color(0xFF6B9B9E),
+          surface: Colors.white,
+          onPrimary: Colors.white,
+          onSurface: Color(0xFF3A3A3A),
+          error: Color(0xFFE89B8E),
         ),
-        textTheme: GoogleFonts.nunitoTextTheme(),
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xFF8BA888),
-          foregroundColor: Colors.white,
+        textTheme: GoogleFonts.interTextTheme().apply(
+          bodyColor: const Color(0xFF3A3A3A),
+          displayColor: const Color(0xFF3A3A3A),
+        ),
+        cardTheme: CardTheme(
+          color: Colors.white,
           elevation: 0,
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             backgroundColor: const Color(0xFF8BA888),
             foregroundColor: Colors.white,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-          ),
-        ),
-        outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-            foregroundColor: const Color(0xFF8BA888),
-            side: const BorderSide(color: Color(0xFF8BA888)),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
+            elevation: 0,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
+            borderSide: BorderSide(color: const Color(0xFF6B6B6B).withOpacity(0.3)),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: const BorderSide(color: Color(0xFF8BA888), width: 2),
-          ),
-        ),
-        cardTheme: CardTheme(
-          elevation: 2,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),

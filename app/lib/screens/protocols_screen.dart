@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_drawer.dart';
 
 class ProtocolsScreen extends StatefulWidget {
   const ProtocolsScreen({Key? key}) : super(key: key);
@@ -435,6 +436,7 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
           ),
         ],
       ),
+      drawer: const AppDrawer(currentRoute: '/protocols'),
       body: Column(
         children: [
           // Header with stats and actions
@@ -480,10 +482,10 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
             child: GridView.builder(
               padding: const EdgeInsets.all(16.0),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
+                crossAxisCount: 4,
                 crossAxisSpacing: 16.0,
                 mainAxisSpacing: 16.0,
-                childAspectRatio: 1.6,
+                childAspectRatio: 0.75,
               ),
               itemCount: protocols.length,
               itemBuilder: (context, index) {
@@ -507,7 +509,7 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
         );
       },
       child: Card(
-        elevation: 2,
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Container(
           decoration: BoxDecoration(
@@ -559,13 +561,13 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
               // Content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(8),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         protocol['description'],
-                        style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -582,9 +584,9 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
               // Footer
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.grey[100],
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF8F6F3),
+                  borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(12),
                     bottomRight: Radius.circular(12),
                   ),
@@ -596,19 +598,19 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
                       '${protocol['patientCount']} patients',
                       style: TextStyle(
                         fontSize: 12,
-                        color: Colors.grey[700],
+                        color: Colors.grey[600],
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Row(
                       children: [
-                        Icon(Icons.visibility_outlined, size: 16, color: Colors.grey[700]),
+                        Icon(Icons.visibility_outlined, size: 16, color: Colors.grey[600]),
                         const SizedBox(width: 4),
                         Text(
                           'View',
                           style: TextStyle(
                             fontSize: 12,
-                            color: Colors.grey[700],
+                            color: Colors.grey[600],
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -626,7 +628,7 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
 
   Widget _buildInfoRow(String label, String value) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4.0),
+      padding: const EdgeInsets.only(bottom: 2.0),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

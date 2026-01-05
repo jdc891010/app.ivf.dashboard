@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../widgets/app_drawer.dart';
 
 class StaffScreen extends StatefulWidget {
   const StaffScreen({Key? key}) : super(key: key);
@@ -145,7 +146,8 @@ class _StaffScreenState extends State<StaffScreen> {
           IconButton(
             icon: const Icon(Icons.home_outlined),
             tooltip: 'Dashboard',
-            onPressed: () => Navigator.pushNamedAndRemoveUntil(context, '/dashboard', (route) => false),
+            onPressed: () => Navigator.pushNamedAndRemoveUntil(
+                context, '/dashboard', (route) => false),
           ),
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
@@ -183,7 +185,7 @@ class _StaffScreenState extends State<StaffScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/staff'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -207,7 +209,7 @@ class _StaffScreenState extends State<StaffScreen> {
               ],
             ),
             const SizedBox(height: 24),
-            
+
             // Search and filter row
             Row(
               children: [
@@ -231,7 +233,7 @@ class _StaffScreenState extends State<StaffScreen> {
                   ),
                 ),
                 const SizedBox(width: 16),
-                
+
                 // Department filter dropdown
                 DropdownButton<String>(
                   value: _selectedDepartment,
@@ -250,7 +252,7 @@ class _StaffScreenState extends State<StaffScreen> {
                   },
                 ),
                 const SizedBox(width: 16),
-                
+
                 // Export button
                 OutlinedButton.icon(
                   onPressed: () {
@@ -262,27 +264,35 @@ class _StaffScreenState extends State<StaffScreen> {
               ],
             ),
             const SizedBox(height: 16),
-            
+
             // Staff count
             Text(
               '${filteredStaff.length} staff members found',
-              style: TextStyle(color: Colors.grey[600]),
+              style: const TextStyle(color: Color(0xFF6B6B6B)),
             ),
             const SizedBox(height: 16),
-            
+
             // Staff grid
             Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1.5,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: filteredStaff.length,
-                itemBuilder: (context, index) {
-                  final staff = filteredStaff[index];
-                  return _buildStaffCard(staff);
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final width = constraints.maxWidth;
+                  final bool narrow = width < 900;
+                  final int crossAxisCount = narrow ? 2 : 3;
+                  final double childAspectRatio = narrow ? 0.85 : 0.70;
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      childAspectRatio: childAspectRatio,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: filteredStaff.length,
+                    itemBuilder: (context, index) {
+                      final staff = filteredStaff[index];
+                      return _buildStaffCard(context, staff);
+                    },
+                  );
                 },
               ),
             ),
@@ -292,12 +302,10 @@ class _StaffScreenState extends State<StaffScreen> {
     );
   }
 
-  Widget _buildStaffCard(Map<String, dynamic> staff) {
+  Widget _buildStaffCard(BuildContext context, Map<String, dynamic> staff) {
     return Card(
       child: InkWell(
-        onTap: () {
-          // View staff details
-        },
+        onTap: () {},
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -306,7 +314,6 @@ class _StaffScreenState extends State<StaffScreen> {
               Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Avatar
                   CircleAvatar(
                     radius: 28,
                     backgroundColor: Theme.of(context).primaryColor,
@@ -320,8 +327,6 @@ class _StaffScreenState extends State<StaffScreen> {
                     ),
                   ),
                   const SizedBox(width: 16),
-                  
-                  // Staff info
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,11 +353,10 @@ class _StaffScreenState extends State<StaffScreen> {
                         const SizedBox(height: 4),
                         Container(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 2,
-                          ),
+                              horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
-                            color: _getStatusColor(staff['status']).withOpacity(0.1),
+                            color: _getStatusColor(staff['status'])
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -369,12 +373,11 @@ class _StaffScreenState extends State<StaffScreen> {
                   ),
                 ],
               ),
-              const Divider(height: 24),
-              
-              // Contact info
+              const SizedBox(height: 16), // Space instead of divider
               Row(
                 children: [
-                  const Icon(Icons.email_outlined, size: 16, color: Colors.grey),
+                  const Icon(Icons.email_outlined,
+                      size: 16, color: Colors.grey),
                   const SizedBox(width: 4),
                   Expanded(
                     child: Text(
@@ -389,7 +392,8 @@ class _StaffScreenState extends State<StaffScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  const Icon(Icons.phone_outlined, size: 16, color: Colors.grey),
+                  const Icon(Icons.phone_outlined,
+                      size: 16, color: Colors.grey),
                   const SizedBox(width: 4),
                   Text(
                     staff['phone'],
@@ -397,29 +401,23 @@ class _StaffScreenState extends State<StaffScreen> {
                   ),
                 ],
               ),
-              
-              // Action buttons
-              const Spacer(),
+              const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   IconButton(
                     icon: const Icon(Icons.edit_outlined),
-                    onPressed: () {
-                      // Edit staff
-                    },
+                    onPressed: () {},
                     tooltip: 'Edit',
                     iconSize: 20,
-                    color: Colors.orange,
+                    color: const Color(0xFFE8C68E),
                   ),
                   IconButton(
                     icon: const Icon(Icons.message_outlined),
-                    onPressed: () {
-                      // Message staff
-                    },
+                    onPressed: () {},
                     tooltip: 'Message',
                     iconSize: 20,
-                    color: const Color(0xFF8BA888),
+                    color: Theme.of(context).primaryColor,
                   ),
                 ],
               ),
@@ -433,151 +431,13 @@ class _StaffScreenState extends State<StaffScreen> {
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Active':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'On Leave':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       case 'Inactive':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
-  }
-
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF8BA888),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/patients');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/lab_results');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/messenger');
-            },
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
-    );
   }
 }

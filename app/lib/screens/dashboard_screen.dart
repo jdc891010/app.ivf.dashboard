@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:intl/intl.dart';
+import '../widgets/app_drawer.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -56,10 +57,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 color: Theme.of(context).colorScheme.onPrimary,
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                Icons.medical_services_outlined,
-                size: 20,
-                color: Theme.of(context).primaryColor,
+              child: Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: Image.asset(
+                  'assets/images/logo.png',
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
             const SizedBox(width: 12),
@@ -108,7 +111,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/dashboard'),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -176,169 +179,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
   }
 
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const CircleAvatar(
-                      radius: 32,
-                      backgroundColor: Colors.white,
-                      child: Icon(
-                        Icons.person,
-                        size: 40,
-                        color: Color(0xFF8BA888),
-                      ),
-                    ),
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(
-                        Icons.medical_services_outlined,
-                        size: 30,
-                        color: Color(0xFF8BA888),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/patients');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medication_outlined,
-            title: 'Treatment Protocols',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/protocols');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/lab_results');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/messenger');
-            },
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/staff');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
-    );
-  }
+ 
 
   Widget _buildQuickStatsRow() {
     return GridView.count(
@@ -346,14 +187,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
       crossAxisSpacing: 16,
       mainAxisSpacing: 16,
       shrinkWrap: true,
-      childAspectRatio: 1.3,
+      childAspectRatio: 1.0,
       physics: const NeverScrollableScrollPhysics(),
       children: [
         _buildStatCard(
           title: 'Total Patients',
           value: _totalPatients.toString(),
           icon: Icons.people_outlined,
-          color: const Color(0xFF8BA888),
+          color: Theme.of(context).primaryColor,
           trend: '+12%',
           isTrendPositive: true,
         ),
@@ -361,7 +202,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           title: 'Active Treatments',
           value: _activePatients.toString(),
           icon: Icons.medical_services_outlined,
-          color: const Color(0xFF6B9B9E),
+          color: Theme.of(context).colorScheme.secondary,
           trend: '+5%',
           isTrendPositive: true,
         ),
@@ -369,7 +210,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           title: 'Today\'s Appointments',
           value: _todayAppointments.toString(),
           icon: Icons.calendar_today_outlined,
-          color: const Color(0xFF575756),
+          color: Theme.of(context).colorScheme.onSurface,
           trend: 'On Track',
           isTrendPositive: true,
         ),
@@ -412,35 +253,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: color.withOpacity(0.1),
+                    color: color.withValues(alpha: 0.1),
                     shape: BoxShape.circle,
                   ),
                   child: Icon(icon, color: color, size: 20),
                 ),
-                Container(
-                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                   decoration: BoxDecoration(
-                     color: isTrendPositive ? Colors.green.withOpacity(0.1) : Colors.red.withOpacity(0.1),
-                     borderRadius: BorderRadius.circular(12),
-                   ),
-                   child: Row(
-                     children: [
-                       Icon(
-                         isTrendPositive ? Icons.trending_up : Icons.trending_down,
-                         size: 14,
-                         color: isTrendPositive ? Colors.green : Colors.red,
-                       ),
-                       const SizedBox(width: 4),
-                       Text(
-                         trend,
-                         style: TextStyle(
-                           fontSize: 12,
-                           fontWeight: FontWeight.bold,
-                           color: isTrendPositive ? Colors.green : Colors.red,
-                         ),
-                       ),
-                     ],
-                   ),
+                Flexible(
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isTrendPositive
+                            ? const Color(0xFF7FB685).withValues(alpha: 0.1)
+                            : const Color(0xFFE89B8E).withValues(alpha: 0.1),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isTrendPositive ? Icons.trending_up : Icons.trending_down,
+                            size: 14,
+                            color: isTrendPositive ? const Color(0xFF7FB685) : const Color(0xFFE89B8E),
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            trend,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: isTrendPositive ? const Color(0xFF7FB685) : const Color(0xFFE89B8E),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -449,10 +299,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
               children: [
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black87,
+                    color: Theme.of(context).colorScheme.onSurface,
                     height: 1.2,
                   ),
                 ),
@@ -487,9 +337,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             SegmentedButton<String>(
               showSelectedIcon: false,
               style: ButtonStyle(
-                padding: MaterialStateProperty.all(const EdgeInsets.symmetric(horizontal: 8)),
+                padding: WidgetStateProperty.all(const EdgeInsets.symmetric(horizontal: 8)),
                 visualDensity: VisualDensity.compact,
-                textStyle: MaterialStateProperty.all(const TextStyle(fontSize: 12)),
+                textStyle: WidgetStateProperty.all(const TextStyle(fontSize: 12)),
               ),
               segments: const [
                 ButtonSegment(value: 'Week', label: Text('Week')),
@@ -541,7 +391,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 4),  
             const Text(
               'Percentage of successful treatments',
-              style: TextStyle(fontSize: 12, color: Colors.grey),  
+              style: TextStyle(fontSize: 12, color: Color(0xFF6B6B6B)),  
             ),
             const SizedBox(height: 16),  
             Expanded(
@@ -552,7 +402,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   barTouchData: BarTouchData(
                     enabled: true,
                     touchTooltipData: BarTouchTooltipData(
-                      tooltipBgColor: Colors.grey[800],
+                      tooltipBgColor: Theme.of(context).colorScheme.onSurface,
                       getTooltipItem: (group, groupIndex, rod, rodIndex) {
                         String ageGroup;
                         switch (group.x) {
@@ -624,10 +474,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         },
                       ),
                     ),
-                    topTitles: AxisTitles(
+                    topTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
-                    rightTitles: AxisTitles(
+                    rightTitles: const AxisTitles(
                       sideTitles: SideTitles(showTitles: false),
                     ),
                   ),
@@ -636,7 +486,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     horizontalInterval: 20,
                     getDrawingHorizontalLine: (value) {
                       return FlLine(
-                        color: Colors.grey[300] ?? Colors.grey,
+                        color: const Color(0xFFE0E0E0),
                         strokeWidth: 1,
                       );
                     },
@@ -686,7 +536,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: 4),
             const Text(
               'Percentage of treatment types',
-              style: TextStyle(fontSize: 12, color: Colors.grey),
+              style: TextStyle(fontSize: 12, color: Color(0xFF6B6B6B)),
             ),
             const SizedBox(height: 16),
             SizedBox(
@@ -758,7 +608,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         );
                       case 3:
                         return PieChartSectionData(
-                          color: Colors.orange,
+                          color: const Color(0xFFE8C68E),
                           value: val,
                           title: '${val.toInt()}%',
                           radius: radius,
@@ -793,7 +643,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
         const SizedBox(height: 6),  
         _buildLegendItem('IUI', const Color(0xFF575756)),
         const SizedBox(height: 6),  
-        _buildLegendItem('Other', Colors.orange),
+        _buildLegendItem('Other', const Color(0xFFE8C68E)),
       ],
     );
   }
@@ -820,7 +670,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.red.withOpacity(0.3), width: 1),
+        side: BorderSide(color: Colors.grey.withOpacity(0.2), width: 1),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -830,85 +680,100 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.notifications_active, color: Colors.red, size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Notifications',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '$_newMessages new',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(Icons.notifications_active, color: Colors.red, size: 20),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'Notifications',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '$_newMessages new',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/messenger');
+                  },
                   child: const Text('View All'),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-            _buildActivityItem(
-              icon: Icons.science,
-              color: Colors.blue,
-              title: 'Lab Results Available',
-              description: 'Hormone test results for Sarah Johnson',
-              time: '10:30 AM',
-              isUrgent: true,
-            ),
-            const Divider(),
-            _buildActivityItem(
-              icon: Icons.medical_services,
-              color: Colors.green,
-              title: 'Treatment Updated',
-              description: 'Protocol adjusted for Michael Roberts',
-              time: '9:15 AM',
-              isUrgent: false,
-            ),
-            const Divider(),
-            _buildActivityItem(
-              icon: Icons.message,
-              color: Colors.orange,
-              title: 'New Message',
-              description: 'Question from Jennifer Davis about medication',
-              time: 'Yesterday',
-              isUrgent: true,
-            ),
-            const Divider(),
-            _buildActivityItem(
-              icon: Icons.calendar_today,
-              color: const Color(0xFF8BA888),
-              title: 'Appointment Scheduled',
-              description: 'Follow-up with David Wilson',
-              time: 'Yesterday',
-              isUrgent: false,
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: OutlinedButton.icon(
-                onPressed: () {
-                  Navigator.pushNamed(context, '/messenger');
-                },
-                icon: const Icon(Icons.message_outlined),
-                label: const Text('Open Messenger'),
-                style: OutlinedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _buildActivityItem(
+                      icon: Icons.science,
+                      color: Colors.blue,
+                      title: 'Lab Results Available',
+                      description: 'Hormone test results for Sarah Johnson',
+                      time: '10:30 AM',
+                      isUrgent: true,
+                    ),
+                    const Divider(),
+                    _buildActivityItem(
+                      icon: Icons.medical_services,
+                      color: Colors.green,
+                      title: 'Treatment Updated',
+                      description: 'Protocol adjusted for Michael Roberts',
+                      time: '9:15 AM',
+                      isUrgent: false,
+                    ),
+                    const Divider(),
+                    _buildActivityItem(
+                      icon: Icons.message,
+                      color: Colors.orange,
+                      title: 'New Message',
+                      description: 'Question from Jennifer Davis about medication',
+                      time: 'Yesterday',
+                      isUrgent: true,
+                    ),
+                    const Divider(),
+                    _buildActivityItem(
+                      icon: Icons.calendar_today,
+                      color: const Color(0xFF8BA888),
+                      title: 'Appointment Scheduled',
+                      description: 'Follow-up with David Wilson',
+                      time: 'Yesterday',
+                      isUrgent: false,
+                    ),
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      child: OutlinedButton.icon(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/messenger');
+                        },
+                        icon: const Icon(Icons.message_outlined),
+                        label: const Text('Open Messenger'),
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -1022,31 +887,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    const Icon(Icons.calendar_today, color: Color(0xFF8BA888), size: 20),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Today\'s Schedule',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Container(
-                      margin: const EdgeInsets.only(left: 8),
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF8BA888),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        '$_todayAppointments total',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
+                Expanded(
+                  child: Row(
+                    children: [
+                      const Icon(Icons.calendar_today, color: Color(0xFF8BA888), size: 20),
+                      const SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'Today\'s Schedule',
+                          style: Theme.of(context).textTheme.titleLarge,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                    ),
-                  ],
+                      Container(
+                        margin: const EdgeInsets.only(left: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF8BA888),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          '$_todayAppointments total',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 TextButton.icon(
                   onPressed: () {

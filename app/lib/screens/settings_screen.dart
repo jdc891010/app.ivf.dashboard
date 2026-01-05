@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/app_drawer.dart';
+
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({Key? key}) : super(key: key);
 
@@ -68,7 +70,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/settings'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -252,10 +254,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             context: context,
                             applicationName: 'IVF Clinic Dashboard',
                             applicationVersion: '1.0.0',
-                            applicationIcon: const Icon(
-                              Icons.medical_services_outlined,
-                              color: Color(0xFF8BA888),
-                              size: 32,
+                            applicationIcon: Image.asset(
+                              'assets/images/logo.png',
+                              width: 32,
+                              height: 32,
                             ),
                             applicationLegalese: ' 2025 IVF Australia. All rights reserved.',
                           );
@@ -318,144 +320,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
       leading: Icon(icon),
       trailing: const Icon(Icons.chevron_right),
       onTap: onTap,
-    );
-  }
-
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF8BA888),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/patients');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/lab_results');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/messenger');
-            },
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/staff');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
     );
   }
 }

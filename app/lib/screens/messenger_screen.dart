@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../widgets/app_drawer.dart';
 
 class MessengerScreen extends StatefulWidget {
   const MessengerScreen({Key? key}) : super(key: key);
@@ -241,7 +242,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/messenger'),
       body: Row(
         children: [
           // Conversations list (left panel)
@@ -335,7 +336,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
             child: Text(
               conversation['avatar'],
               style: TextStyle(
-                color: isSelected ? Colors.white : Colors.grey[700],
+                color: isSelected ? Colors.white : Theme.of(context).colorScheme.onSurface,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -348,7 +349,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                 width: 12,
                 height: 12,
                 decoration: BoxDecoration(
-                  color: Colors.green,
+                  color: const Color(0xFF7FB685),
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
                 ),
@@ -368,7 +369,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
           fontWeight: conversation['unread'] > 0 ? FontWeight.bold : FontWeight.normal,
-          color: conversation['unread'] > 0 ? Colors.black87 : Colors.grey[600],
+          color: conversation['unread'] > 0 ? Theme.of(context).colorScheme.onSurface : Colors.grey[600],
         ),
       ),
       trailing: Column(
@@ -380,8 +381,8 @@ class _MessengerScreenState extends State<MessengerScreen> {
             style: TextStyle(
               fontSize: 12,
               color: conversation['unread'] > 0 
-                  ? Theme.of(context).primaryColor 
-                  : Colors.grey[500],
+                  ? Theme.of(context).primaryColor
+                  : const Color(0xFF9E9E9E),
             ),
           ),
           const SizedBox(height: 4),
@@ -421,7 +422,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
             color: Colors.white,
             boxShadow: [
               BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.05),
                 spreadRadius: 1,
                 blurRadius: 1,
               ),
@@ -454,7 +455,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                     Text(
                       conversation['online'] ? 'Online' : 'Offline',
                       style: TextStyle(
-                        color: conversation['online'] ? Colors.green : Colors.grey,
+                        color: conversation['online'] ? const Color(0xFF7FB685) : const Color(0xFF9E9E9E),
                         fontSize: 12,
                       ),
                     ),
@@ -489,7 +490,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
         // Messages area
         Expanded(
           child: Container(
-            color: Colors.grey[100],
+            color: const Color(0xFFF5F5F5),
             padding: const EdgeInsets.all(16),
             child: ListView.builder(
               reverse: true,
@@ -508,10 +509,10 @@ class _MessengerScreenState extends State<MessengerScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 1,
+                    BoxShadow(
+                      color: const Color(0xFF9E9E9E).withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 1,
                 offset: const Offset(0, -1),
               ),
             ],
@@ -534,7 +535,7 @@ class _MessengerScreenState extends State<MessengerScreen> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: const Color(0xFFF5F5F5),
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10,
@@ -575,13 +576,10 @@ class _MessengerScreenState extends State<MessengerScreen> {
             CircleAvatar(
               radius: 16,
               backgroundColor: Colors.grey[300],
-              child: Text(
-                message['sender'].toString().substring(0, 1),
-                style: TextStyle(
-                  color: Colors.grey[700],
-                  fontWeight: FontWeight.bold,
-                  fontSize: 12,
-                ),
+              child: Icon(
+                Icons.person,
+                color: Theme.of(context).colorScheme.onSurface,
+                size: 20,
               ),
             ),
             const SizedBox(width: 8),
@@ -654,141 +652,5 @@ class _MessengerScreenState extends State<MessengerScreen> {
     }
   }
 
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF8BA888),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/patients');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/lab_results');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/staff');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
-    );
-  }
+ 
 }

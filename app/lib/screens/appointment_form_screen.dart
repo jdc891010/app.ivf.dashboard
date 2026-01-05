@@ -231,7 +231,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
               // Selected patient info
               Row(
                 children: [
-                  const Icon(Icons.person, color: Colors.grey),
+                  const Icon(Icons.person, color: const Color(0xFF9E9E9E)),
                   const SizedBox(width: 8),
                   Expanded(
                     child: Column(
@@ -293,7 +293,7 @@ class _AppointmentFormScreenState extends State<AppointmentFormScreen> {
                 Container(
                   constraints: const BoxConstraints(maxHeight: 200),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey.shade300),
+                    border: Border.all(color: const Color(0xFFE0E0E0)),
                     borderRadius: BorderRadius.circular(4),
                   ),
                   child: ListView.builder(

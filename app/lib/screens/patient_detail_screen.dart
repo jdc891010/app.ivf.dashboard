@@ -1717,13 +1717,13 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> with SingleTi
       case 'Scheduled':
         return const Color(0xFF8BA888);
       case 'Completed':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'Cancelled':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       case 'No Show':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
   }
 
@@ -2297,54 +2297,54 @@ class _PatientDetailScreenState extends State<PatientDetailScreen> with SingleTi
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Active':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'New':
         return const Color(0xFF8BA888);
       case 'Completed':
-        return Colors.blue;
+        return const Color(0xFF6B9B9E);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
   }
 
   Color _getPriorityColor(String priority) {
     switch (priority) {
       case 'High':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       case 'Medium':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       case 'Low':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
   }
 
   Color _getHormoneStatusColor(String status) {
     switch (status) {
       case 'high':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       case 'low':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       case 'normal':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
   }
 
   Color _getMedicationStatusColor(String status) {
     switch (status) {
       case 'Active':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'Scheduled':
         return const Color(0xFF8BA888);
       case 'Completed':
-        return Colors.blue;
+        return const Color(0xFF6B9B9E);
       case 'Discontinued':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
   }
 }

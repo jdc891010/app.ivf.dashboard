@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/app_drawer.dart';
+
 class LabResultsScreen extends StatefulWidget {
   const LabResultsScreen({Key? key}) : super(key: key);
 
@@ -213,7 +215,7 @@ class _LabResultsScreenState extends State<LabResultsScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/lab_results'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -296,7 +298,7 @@ class _LabResultsScreenState extends State<LabResultsScreen> {
             // Results count
             Text(
               '${filteredResults.length} results found',
-              style: TextStyle(color: Colors.grey[600]),
+              style: TextStyle(color: const Color(0xFF6B6B6B)),
             ),
             const SizedBox(height: 16),
             
@@ -603,166 +605,28 @@ class _LabResultsScreenState extends State<LabResultsScreen> {
       case 'Semen Analysis':
         return const Color(0xFF575756); // Accent color
       case 'Blood Test':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       case 'Ultrasound Report':
-        return Colors.blue;
+        return const Color(0xFF6B9B9E);
       default:
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
     }
   }
 
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Normal':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'Good':
-        return Colors.green;
+        return const Color(0xFF7FB685);
       case 'Abnormal':
-        return Colors.red;
+        return const Color(0xFFE89B8E);
       case 'Low':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       case 'High':
-        return Colors.orange;
+        return const Color(0xFFE8C68E);
       default:
-        return Colors.grey;
+        return const Color(0xFF6B6B6B);
     }
-  }
-
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF8BA888),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/patients');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/messenger');
-            },
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/staff');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
-    );
   }
 }

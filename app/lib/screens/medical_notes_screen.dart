@@ -220,31 +220,31 @@ class _MedicalNotesScreenState extends State<MedicalNotesScreen> {
                 _buildQuickInputButton(
                   icon: Icons.camera_alt,
                   label: 'Take Photo',
-                  color: Colors.green,
+                  color: const Color(0xFF7FB685),
                   onPressed: _takePhoto,
                 ),
                 _buildQuickInputButton(
                   icon: Icons.videocam,
                   label: 'Record Video',
-                  color: Colors.orange,
+                  color: const Color(0xFFE8C68E),
                   onPressed: _recordVideo,
                 ),
                 _buildQuickInputButton(
                   icon: Icons.mic_none,
                   label: _isRecording ? 'Stop Recording' : 'Voice Note',
-                  color: _isRecording ? Colors.red : Colors.purple,
+                  color: _isRecording ? const Color(0xFFE89B8E) : const Color(0xFF9B8EAD),
                   onPressed: _toggleVoiceRecording,
                 ),
                 _buildQuickInputButton(
                   icon: Icons.attach_file,
                   label: 'Attach File',
-                  color: Colors.teal,
+                  color: const Color(0xFF6B9B9E),
                   onPressed: _attachFile,
                 ),
                 _buildQuickInputButton(
                   icon: Icons.text_snippet,
                   label: 'Use Template',
-                  color: Colors.indigo,
+                  color: const Color(0xFF575756),
                   onPressed: _useTemplate,
                 ),
               ],
@@ -388,23 +388,23 @@ class _MedicalNotesScreenState extends State<MedicalNotesScreen> {
     switch (attachment['type']) {
       case 'image':
         icon = Icons.image;
-        color = Colors.blue;
+        color = const Color(0xFF6B9B9E);
         break;
       case 'video':
         icon = Icons.videocam;
-        color = Colors.red;
+        color = const Color(0xFFE89B8E);
         break;
       case 'audio':
         icon = Icons.mic;
-        color = Colors.orange;
+        color = const Color(0xFFE8C68E);
         break;
       case 'file':
         icon = Icons.insert_drive_file;
-        color = Colors.green;
+        color = const Color(0xFF7FB685);
         break;
       default:
         icon = Icons.attach_file;
-        color = Colors.grey;
+        color = const Color(0xFF6B6B6B);
     }
     
     return Container(
@@ -550,7 +550,7 @@ class _MedicalNotesScreenState extends State<MedicalNotesScreen> {
                         'date': pickedDate,
                         'time': formattedTime,
                         'purpose': 'Follow-up',
-                        'notes': 'Follow-up appointment for ${_selectedCategory}',
+                        'notes': 'Follow-up appointment for $_selectedCategory',
                         'status': 'Scheduled',
                       };
                       

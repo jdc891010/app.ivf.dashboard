@@ -32,9 +32,80 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
   void didChangeDependencies() {
     super.didChangeDependencies();
     // Get protocol data from route arguments
-    final args = ModalRoute.of(context)?.settings.arguments;
+    if (protocolData == null) {
+      final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map<String, dynamic>) {
       protocolData = args;
+    } else {
+      // Fallback/Default data for testing or direct access
+      protocolData = {
+        'id': 'P001',
+        'name': 'Long Protocol with Antagonist',
+        'description': 'Standard long protocol with GnRH antagonist for controlled ovarian stimulation',
+        'patientCount': 12,
+        'startDate': DateTime(2025, 2, 15),
+        'currentPhase': 'Ovarian Stimulation',
+        'estimatedEggRetrieval': DateTime(2025, 3, 15),
+        'estimatedEmbryoTransfer': DateTime(2025, 3, 20),
+        'notes': 'Patient responding well to stimulation. Follicle growth as expected.',
+        'ageRange': '30-38',
+        'successRate': '38%',
+        'riskLevel': 'Medium',
+        'duration': '4-5 weeks',
+        'medications': [
+          {
+            'name': 'Gonal-F',
+            'dosage': '225 IU',
+            'frequency': 'Daily',
+            'duration': '10-12 days',
+            'phase': 'Stimulation',
+            'startDay': 3,
+            'endDay': 14,
+          },
+          {
+            'name': 'Cetrotide',
+            'dosage': '0.25 mg',
+            'frequency': 'Daily',
+            'duration': '5-6 days',
+            'phase': 'Prevention of premature ovulation',
+            'startDay': 8,
+            'endDay': 14,
+          },
+          {
+            'name': 'Ovidrel',
+            'dosage': '250 mcg',
+            'frequency': 'Once',
+            'duration': '1 day',
+            'phase': 'Trigger',
+            'startDay': 14,
+            'endDay': 14,
+          },
+        ],
+        'procedures': [
+          {
+            'name': 'Baseline Ultrasound',
+            'day': 2,
+            'description': 'Initial scan to assess ovarian reserve',
+          },
+          {
+            'name': 'Follicle Monitoring',
+            'day': 8,
+            'description': 'Ultrasound to monitor follicle growth',
+          },
+          {
+            'name': 'Egg Retrieval',
+            'day': 16,
+            'description': 'Surgical procedure to collect mature eggs',
+          },
+          {
+            'name': 'Embryo Transfer',
+            'day': 21,
+            'description': 'Transfer of embryos to uterus',
+          },
+        ],
+        'color': 0xFF8BA888,
+      };
+    }
     }
   }
 
@@ -67,7 +138,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
           IconButton(
             icon: const Icon(Icons.edit_outlined),
             onPressed: () {
-              // Edit protocol
+              _showEditProtocolDialog();
             },
             tooltip: 'Edit Protocol',
           ),
@@ -113,7 +184,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
       decoration: BoxDecoration(
         color: Color(protocolData!['color']).withOpacity(0.1),
         border: Border(
-          bottom: BorderSide(color: Colors.grey[300]!),
+          bottom: BorderSide(color: const Color(0xFFE0E0E0)),
         ),
       ),
       child: Row(
@@ -137,7 +208,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  protocolData!['name'],
+                  '${protocolData!['name']}${protocolData!.containsKey('version') ? " (v${protocolData!['version']})" : ""}',
                   style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -146,7 +217,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
                 const SizedBox(height: 4),
                 Text(
                   protocolData!['description'],
-                  style: TextStyle(color: Colors.grey[700]),
+                  style: TextStyle(color: const Color(0xFF4A4A4A)),
                 ),
                 const SizedBox(height: 8),
                 Wrap(
@@ -171,16 +242,16 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
+        color: const Color(0xFFF5F5F5),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: Colors.grey[300]!),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             '$label: ',
-            style: TextStyle(fontSize: 12, color: Colors.grey[700]),
+            style: TextStyle(fontSize: 12, color: const Color(0xFF4A4A4A)),
           ),
           Text(
             value,
@@ -196,13 +267,13 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
       decoration: BoxDecoration(
         color: Colors.white,
         border: Border(
-          bottom: BorderSide(color: Colors.grey[300]!),
+          bottom: BorderSide(color: const Color(0xFFE0E0E0)),
         ),
       ),
       child: TabBar(
         controller: _tabController,
         labelColor: Theme.of(context).primaryColor,
-        unselectedLabelColor: Colors.grey[600],
+        unselectedLabelColor: const Color(0xFF6B6B6B),
         indicatorColor: Theme.of(context).primaryColor,
         tabs: const [
           Tab(text: 'Overview'),
@@ -384,7 +455,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
+                  SizedBox(
                     height: 100,
                     child: _buildMedicationTimeline(),
                   ),
@@ -440,8 +511,8 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TableCalendar(
-                    firstDay: DateTime.utc(2025, 1, 1),
-                    lastDay: DateTime.utc(2025, 12, 31),
+                    firstDay: DateTime.utc(2024, 1, 1),
+                    lastDay: DateTime.utc(2030, 12, 31),
                     focusedDay: _focusedDay,
                     calendarFormat: _calendarFormat,
                     selectedDayPredicate: (day) {
@@ -676,7 +747,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
           children: [
             Icon(
               isRisk ? Icons.warning_amber_outlined : Icons.check_circle_outline,
-              color: isRisk ? Colors.orange : Colors.green,
+              color: isRisk ? const Color(0xFFE89B8E) : const Color(0xFF7FB685),
             ),
             const SizedBox(width: 8),
             Text(
@@ -691,7 +762,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('• '),
+                  const Text('• '),
                   Expanded(child: Text(item)),
                 ],
               ),
@@ -997,7 +1068,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
         const SizedBox(height: 8),
         Text(
           'Advantages:',
-          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.green[700]),
+          style: TextStyle(fontWeight: FontWeight.w500, color: const Color(0xFF7FB685)),
         ),
         ...advantages.map((item) => Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
@@ -1012,7 +1083,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
         const SizedBox(height: 8),
         Text(
           'Disadvantages:',
-          style: TextStyle(fontWeight: FontWeight.w500, color: Colors.red[700]),
+          style: TextStyle(fontWeight: FontWeight.w500, color: const Color(0xFFE89B8E)),
         ),
         ...disadvantages.map((item) => Padding(
               padding: const EdgeInsets.only(left: 16.0, bottom: 4.0),
@@ -1139,7 +1210,7 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
                             ],
                           ),
                           behavior: SnackBarBehavior.floating,
-                          backgroundColor: Colors.green,
+                          backgroundColor: const Color(0xFF7FB685),
                         ),
                       );
                     }
@@ -1148,6 +1219,112 @@ class _ProtocolDetailScreenState extends State<ProtocolDetailScreen> with Single
             ),
           ],
         ),
+      ),
+    );
+  }
+  void _showEditProtocolDialog() {
+    final nameController = TextEditingController(text: protocolData!['name']);
+    final descriptionController = TextEditingController(text: protocolData!['description']);
+    final notesController = TextEditingController(text: protocolData!['notes']);
+    final formKey = GlobalKey<FormState>();
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Protocol'),
+        content: Container(
+          width: double.maxFinite,
+          child: Form(
+            key: formKey,
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Create a new version of this protocol with updated details.',
+                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: nameController,
+                    decoration: const InputDecoration(
+                      labelText: 'Protocol Name',
+                      border: OutlineInputBorder(),
+                    ),
+                    validator: (value) => value?.isEmpty ?? true ? 'Name is required' : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: descriptionController,
+                    decoration: const InputDecoration(
+                      labelText: 'Description',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 2,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: notesController,
+                    decoration: const InputDecoration(
+                      labelText: 'Clinical Notes',
+                      border: OutlineInputBorder(),
+                    ),
+                    maxLines: 3,
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.amber.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: Colors.amber),
+                    ),
+                    child: Row(
+                      children: const [
+                        Icon(Icons.info_outline, color: Colors.amber, size: 16),
+                        SizedBox(width: 8),
+                        Expanded(child: Text('Editing will create a new version of this protocol.', style: TextStyle(fontSize: 12))),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (formKey.currentState?.validate() ?? false) {
+                setState(() {
+                  // Increment version
+                  int currentVersion = protocolData!['version'] ?? 1;
+                  int newVersion = currentVersion + 1;
+                  
+                  // Update data
+                  protocolData!['name'] = nameController.text;
+                  protocolData!['description'] = descriptionController.text;
+                  protocolData!['notes'] = notesController.text;
+                  protocolData!['version'] = newVersion;
+                  protocolData!['lastModified'] = DateTime.now();
+                });
+                Navigator.pop(context);
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Protocol updated to Version ${protocolData!['version']}'),
+                    backgroundColor: Theme.of(context).primaryColor,
+                  ),
+                );
+              }
+            },
+            child: const Text('Save New Version'),
+          ),
+        ],
       ),
     );
   }

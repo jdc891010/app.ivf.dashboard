@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/app_drawer.dart';
+
 class PatientsScreen extends StatefulWidget {
   const PatientsScreen({Key? key}) : super(key: key);
 
@@ -211,7 +213,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ),
         ],
       ),
-      drawer: _buildNavigationDrawer(),
+      drawer: const AppDrawer(currentRoute: '/patients'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -416,7 +418,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                                   },
                                   tooltip: 'View Details',
                                   iconSize: 20,
-                                  color: Colors.blue,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 IconButton(
                                   icon: const Icon(Icons.edit_outlined),
@@ -425,7 +427,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
                                   },
                                   tooltip: 'Edit',
                                   iconSize: 20,
-                                  color: Colors.orange,
+                                  color: const Color(0xFFE8C68E),
                                 ),
                               ],
                             ),
@@ -452,159 +454,21 @@ class _PatientsScreenState extends State<PatientsScreen> {
     );
   }
 
-  Widget _buildNavigationDrawer() {
-    return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          DrawerHeader(
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const CircleAvatar(
-                  radius: 32,
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.person,
-                    size: 40,
-                    color: Color(0xFF8BA888),
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  'Dr. Emily Thompson',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  'Fertility Specialist',
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          _buildDrawerItem(
-            icon: Icons.dashboard_outlined,
-            title: 'Dashboard',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushReplacementNamed(context, '/dashboard');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.people_outline,
-            title: 'Patients',
-            isSelected: true,
-            onTap: () => Navigator.pop(context),
-          ),
-          _buildDrawerItem(
-            icon: Icons.calendar_today_outlined,
-            title: 'Appointments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/appointments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.medical_services_outlined,
-            title: 'Treatments',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/treatments');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.science_outlined,
-            title: 'Lab Results',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/lab_results');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.message_outlined,
-            title: 'Messages',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/messenger');
-            },
-          ),
-          const Divider(),
-          _buildDrawerItem(
-            icon: Icons.group_outlined,
-            title: 'Staff',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/staff');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.settings_outlined,
-            title: 'Settings',
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-          _buildDrawerItem(
-            icon: Icons.help_outline,
-            title: 'Help & Support',
-            onTap: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildDrawerItem({
-    required IconData icon,
-    required String title,
-    bool isSelected = false,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-      ),
-      title: Text(
-        title,
-        style: TextStyle(
-          color: isSelected ? Theme.of(context).primaryColor : Colors.grey[700],
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-        ),
-      ),
-      onTap: onTap,
-      selected: isSelected,
-      selectedTileColor: Theme.of(context).primaryColor.withOpacity(0.1),
-    );
-  }
-
   Color _getStatusColor(String status) {
     switch (status) {
       case 'Active':
-        return Colors.green;
+        return Theme.of(context).primaryColor;
       case 'New':
-        return const Color(0xFF8BA888);
+        return Theme.of(context).primaryColor;
       case 'Completed':
-        return Colors.blue;
+        return Theme.of(context).colorScheme.secondary;
       default:
-        return Colors.grey;
+        return Colors.grey[600]!;
     }
   }
 
   void _showAddPatientDialog() {
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
     String name = '';
     String age = '';
     String email = '';
@@ -615,7 +479,7 @@ class _PatientsScreenState extends State<PatientsScreen> {
       builder: (context) => AlertDialog(
         title: const Text('Add New Patient'),
         content: Form(
-          key: _formKey,
+          key: formKey,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -650,12 +514,12 @@ class _PatientsScreenState extends State<PatientsScreen> {
           ),
           ElevatedButton(
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
-                _formKey.currentState!.save();
+              if (formKey.currentState!.validate()) {
+                formKey.currentState!.save();
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Patient $name added successfully'),
+                    content: Text('Patient $name added successfully (Age: $age, Email: $email, Phone: $phone)'),
                     backgroundColor: Colors.green,
                   ),
                 );

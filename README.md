@@ -1,72 +1,96 @@
 # IVF Clinic Dashboard
 
-A Flutter web application for IVF clinics to manage patients, appointments, treatments, lab results, and more.
+A comprehensive digital ecosystem designed to streamline fertility treatment management, enhancing clinical efficiency and patient care through centralized data and real-time communication.
+
+## Overview
+The IVF Clinic Dashboard unifies the complex workflows of fertility treatments—from patient intake and protocol planning to lab result tracking and cycle monitoring—into a single, intuitive interface. It supports fertility specialists, embryologists, and nursing staff in making data-driven decisions while offering a transparent experience for patients.
+
+For more detailed information, please refer to [OVERVIEW.md](OVERVIEW.md).
+
+## Key Features
+- **Executive Dashboard**: Real-time metrics on success rates, active patients, and daily appointments.
+- **Protocol Management**: Create and track custom treatment protocols (e.g., Long Protocol with Antagonist).
+- **Lab Results**: Integrated tracking for hormone panels, semen analysis, and genetic tests.
+- **Patient Tracking**: Comprehensive profiles with medical history and treatment cycles.
+- **Secure Messenger**: Direct communication between clinic staff and patients.
+- **Staff Management**: Tools for managing roles and shifts.
+- **Appointment Scheduling**: Integrated calendar for consultations and procedures.
 
 ## Tech Stack
-- Flutter (`>=3.0.0`) and Dart
-- State management: `provider`
-- HTTP client: `http`
-- UI and visuals: `google_fonts`, `fl_chart`, `data_table_2`, `table_calendar`, `flutter_svg`
-- Storage: `shared_preferences`
+- **Framework**: Flutter (`>=3.0.0`) & Dart
+- **State Management**: `provider` (or local state where appropriate)
+- **Visuals**: `fl_chart`, `google_fonts`, `flutter_svg`
+- **Data Display**: `data_table_2`, `table_calendar`
+- **Testing**: `flutter_test`, `integration_test`
 
-## Repository Layout
+## Repository Structure
 ```
 app.ivf.dashboard/
-├─ app/
-│  ├─ lib/
-│  │  ├─ main.dart
-│  │  └─ screens/
-│  │     ├─ dashboard_screen.dart
-│  │     ├─ patients_screen.dart
-│  │     ├─ patient_detail_screen.dart
-│  │     ├─ appointments_screen.dart
-│  │     ├─ appointment_form_screen.dart
-│  │     ├─ treatments_screen.dart
-│  │     ├─ protocols_screen.dart
-│  │     ├─ protocol_detail_screen.dart
-│  │     ├─ lab_results_screen.dart
-│  │     ├─ messenger_screen.dart
-│  │     ├─ medical_notes_screen.dart
-│  │     ├─ staff_screen.dart
-│  │     └─ settings_screen.dart
-│  ├─ assets/images/
-│  │  ├─ logo.svg
-│  │  └─ sarah_profile.jpg
-│  ├─ pubspec.yaml
-│  └─ index.html
-├─ .gitignore
-└─ README.md
+├── app/
+│   ├── integration_test/   # End-to-end tests
+│   ├── lib/
+│   │   ├── screens/        # UI Screens (Dashboard, Patients, etc.)
+│   │   ├── widgets/        # Reusable components
+│   │   ├── utils/          # Helpers and validators
+│   │   └── main.dart       # Entry point
+│   ├── test/               # Unit and Widget tests
+│   ├── assets/             # Images and static resources
+│   ├── Makefile            # Automation for testing
+│   ├── test.bat            # Windows batch script for testing
+│   └── pubspec.yaml        # Dependencies
+├── screen_samples/         # Screenshots of the application
+├── OVERVIEW.md             # Detailed product documentation
+└── README.md               # This file
 ```
 
-## Application Entry
-- Entry point: `app/lib/main.dart`
-- Initial route: `/dashboard` (`app/lib/main.dart:81`)
-- Named routes registered in `MaterialApp.routes` (`app/lib/main.dart:82-97`)
+## Getting Started
 
-## Prerequisites
-- Install Flutter SDK (3.x) and enable web support: `flutter config --enable-web`
-- Ensure Chrome is installed for web runs
+### Prerequisites
+- Flutter SDK (3.x) installed and on your PATH.
+- **Web**: Google Chrome installed.
+- **Windows**: Visual Studio 2022 with C++ Desktop Development workload (for Windows desktop app).
 
-## Setup
-- `cd app`
-- `flutter pub get`
+### Installation
+1. Navigate to the app directory:
+   ```bash
+   cd app
+   ```
+2. Install dependencies:
+   ```bash
+   flutter pub get
+   ```
 
-## Run (Web)
-- `flutter run -d chrome`
+### Running the Application
 
-## Build (Web)
-- `flutter build web`
-- Output in `app/build/web`
+**Web:**
+```bash
+flutter run -d chrome
+```
 
-## Test
-- `flutter test`
+**Windows:**
+```bash
+flutter run -d windows
+```
 
-## Lint / Analyze
-- `flutter analyze`
+## Testing
+This project includes a comprehensive testing suite managed by a `Makefile` (and `test.bat` for Windows users).
+
+### Running Tests
+To run the full suite (Unit + Widget):
+```bash
+# Windows (Command Prompt/PowerShell)
+.\test.bat
+
+# Linux/Mac (or Windows with Make installed)
+make test
+```
+
+### Test Categories
+- **Unit Tests**: `make unit` - Tests individual logic (e.g., validators).
+- **Widget Tests**: `make widget` - Tests UI components in isolation.
+- **Integration Tests**: `make integration` - Runs full app flows on a device/emulator.
 
 ## Notable Dependencies
-- Declared in `app/pubspec.yaml` (`app/pubspec.yaml:11-24`)
-
-## Assets
-- Configured under `flutter.assets` (`app/pubspec.yaml:30-33`)
-- Images located in `app/assets/images/`
+- `fl_chart`: For dashboard analytics visualization.
+- `table_calendar`: For the appointment scheduling interface.
+- `data_table_2`: For responsive data grids.

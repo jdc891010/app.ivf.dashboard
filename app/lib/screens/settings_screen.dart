@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:provider/provider.dart';
+import '../providers/settings_provider.dart';
 import '../widgets/app_drawer.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -10,11 +11,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  // Sample settings
-  bool _enableNotifications = true;
-  bool _enableEmailAlerts = true;
-  bool _enableDarkMode = false;
-  String _selectedLanguage = 'English';
   final List<String> _languageOptions = [
     'English',
     'Spanish',
@@ -25,6 +21,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<SettingsProvider>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Settings'),
@@ -36,14 +34,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           IconButton(
             icon: const Icon(Icons.notifications_outlined),
-            onPressed: () {
-              // Show notifications
-            },
+            onPressed: () {},
           ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () {
-              // Show confirmation dialog
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -93,25 +88,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         title: 'Profile Information',
                         description: 'Update your personal information',
                         icon: Icons.edit_outlined,
-                        onTap: () {
-                          // Navigate to profile edit screen
-                        },
+                        onTap: () => _showProfileDialog(context, settings),
                       ),
                       _buildSettingsCard(
                         title: 'Change Password',
                         description: 'Update your password',
                         icon: Icons.lock_outline,
-                        onTap: () {
-                          // Navigate to change password screen
-                        },
-                      ),
-                      _buildSettingsCard(
-                        title: 'Two-Factor Authentication',
-                        description: 'Enable additional security',
-                        icon: Icons.security_outlined,
-                        onTap: () {
-                          // Navigate to 2FA settings
-                        },
+                        onTap: () => _showPasswordDialog(context),
                       ),
                     ],
                   ),
@@ -123,32 +106,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       SwitchListTile(
                         title: const Text('Enable Notifications'),
                         subtitle: const Text('Receive in-app notifications'),
-                        value: _enableNotifications,
-                        onChanged: (value) {
-                          setState(() {
-                            _enableNotifications = value;
-                          });
-                        },
+                        value: settings.enableNotifications,
+                        onChanged: (value) => settings.setNotifications(value),
                         secondary: const Icon(Icons.notifications_active_outlined),
                       ),
                       SwitchListTile(
                         title: const Text('Email Alerts'),
                         subtitle: const Text('Receive important updates via email'),
-                        value: _enableEmailAlerts,
-                        onChanged: (value) {
-                          setState(() {
-                            _enableEmailAlerts = value;
-                          });
-                        },
+                        value: settings.enableEmailAlerts,
+                        onChanged: (value) => settings.setEmailAlerts(value),
                         secondary: const Icon(Icons.email_outlined),
-                      ),
-                      _buildSettingsCard(
-                        title: 'Notification Preferences',
-                        description: 'Customize which notifications you receive',
-                        icon: Icons.tune_outlined,
-                        onTap: () {
-                          // Navigate to notification preferences
-                        },
                       ),
                     ],
                   ),
@@ -160,25 +127,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       SwitchListTile(
                         title: const Text('Dark Mode'),
                         subtitle: const Text('Use dark theme'),
-                        value: _enableDarkMode,
-                        onChanged: (value) {
-                          setState(() {
-                            _enableDarkMode = value;
-                          });
-                        },
+                        value: settings.isDarkMode,
+                        onChanged: (value) => settings.setDarkMode(value),
                         secondary: const Icon(Icons.dark_mode_outlined),
                       ),
                       ListTile(
                         title: const Text('Language'),
-                        subtitle: Text('Selected: $_selectedLanguage'),
+                        subtitle: Text('Selected: ${settings.selectedLanguage}'),
                         leading: const Icon(Icons.language_outlined),
                         trailing: DropdownButton<String>(
-                          value: _selectedLanguage,
+                          value: settings.selectedLanguage,
                           onChanged: (String? newValue) {
                             if (newValue != null) {
-                              setState(() {
-                                _selectedLanguage = newValue;
-                              });
+                              settings.setLanguage(newValue);
                             }
                           },
                           items: _languageOptions.map<DropdownMenuItem<String>>((String value) {
@@ -198,27 +159,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.settings_outlined,
                     children: [
                       _buildSettingsCard(
-                        title: 'Data Management',
-                        description: 'Manage your data and exports',
-                        icon: Icons.storage_outlined,
-                        onTap: () {
-                          // Navigate to data management
-                        },
-                      ),
-                      _buildSettingsCard(
                         title: 'Backup & Restore',
                         description: 'Backup or restore your data',
                         icon: Icons.backup_outlined,
                         onTap: () {
-                          // Navigate to backup settings
-                        },
-                      ),
-                      _buildSettingsCard(
-                        title: 'System Logs',
-                        description: 'View system logs and activity',
-                        icon: Icons.history_outlined,
-                        onTap: () {
-                          // Navigate to system logs
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Backup service is currently offline')),
+                          );
                         },
                       ),
                     ],
@@ -229,47 +176,105 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     icon: Icons.help_outline,
                     children: [
                       _buildSettingsCard(
-                        title: 'User Guide',
-                        description: 'View the user guide and documentation',
-                        icon: Icons.menu_book_outlined,
-                        onTap: () {
-                          // Open user guide
-                        },
-                      ),
-                      _buildSettingsCard(
-                        title: 'Contact Support',
-                        description: 'Get help from our support team',
-                        icon: Icons.support_agent_outlined,
-                        onTap: () {
-                          // Contact support
-                        },
-                      ),
-                      _buildSettingsCard(
                         title: 'About',
                         description: 'View app information and version',
                         icon: Icons.info_outline,
                         onTap: () {
-                          // Show about dialog
                           showAboutDialog(
                             context: context,
                             applicationName: 'IVF Clinic Dashboard',
                             applicationVersion: '1.0.0',
-                            applicationIcon: Image.asset(
-                              'assets/images/logo.png',
-                              width: 32,
-                              height: 32,
-                            ),
-                            applicationLegalese: ' 2025 IVF Australia. All rights reserved.',
+                            applicationIcon: const Icon(Icons.local_hospital, size: 32, color: Color(0xFF8BA888)),
+                            applicationLegalese: ' 2026 IVF Personal Analytics. All rights reserved.',
                           );
                         },
                       ),
                     ],
                   ),
+                  const SizedBox(height: 32),
                 ],
               ),
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showProfileDialog(BuildContext context, SettingsProvider settings) {
+    final nameController = TextEditingController(text: settings.userName);
+    final emailController = TextEditingController(text: settings.userEmail);
+    final phoneController = TextEditingController(text: settings.userPhone);
+
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Edit Profile'),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: nameController,
+                decoration: const InputDecoration(labelText: 'Full Name'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: phoneController,
+                decoration: const InputDecoration(labelText: 'Phone'),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () {
+              settings.updateProfile(
+                name: nameController.text,
+                email: emailController.text,
+                phone: phoneController.text,
+                role: settings.userRole,
+              );
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Profile updated successfully')),
+              );
+            },
+            child: const Text('Save'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showPasswordDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Change Password'),
+        content: const Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(decoration: InputDecoration(labelText: 'Current Password'), obscureText: true),
+            SizedBox(height: 16),
+            TextField(decoration: InputDecoration(labelText: 'New Password'), obscureText: true),
+            SizedBox(height: 16),
+            TextField(decoration: InputDecoration(labelText: 'Confirm New Password'), obscureText: true),
+          ],
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Cancel')),
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Change Password'),
+          ),
+        ],
       ),
     );
   }

@@ -485,7 +485,7 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
                 crossAxisCount: 4,
                 crossAxisSpacing: 16.0,
                 mainAxisSpacing: 16.0,
-                childAspectRatio: 0.75,
+                childAspectRatio: 1.0,
               ),
               itemCount: protocols.length,
               itemBuilder: (context, index) {
@@ -500,6 +500,8 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
   }
 
   Widget _buildProtocolCard(Map<String, dynamic> protocol) {
+    final Color primaryColor = Color(protocol['color']);
+    
     return InkWell(
       onTap: () {
         Navigator.pushNamed(
@@ -510,23 +512,23 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
       },
       child: Card(
         elevation: 0,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Color(protocol['color']).withOpacity(0.3)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: primaryColor.withOpacity(0.2)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // Header
               Container(
-                padding: const EdgeInsets.all(10),
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Color(protocol['color']).withOpacity(0.1),
+                  color: primaryColor.withOpacity(0.05),
                   borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(12),
-                    topRight: Radius.circular(12),
+                    topLeft: Radius.circular(16),
+                    topRight: Radius.circular(16),
                   ),
                 ),
                 child: Row(
@@ -534,22 +536,22 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
                     Container(
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
-                        color: Color(protocol['color']).withOpacity(0.2),
+                        color: primaryColor.withOpacity(0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Icon(
-                        Icons.medical_services_outlined,
-                        color: Color(protocol['color']),
+                        Icons.insights_outlined,
+                        color: primaryColor,
                         size: 20,
                       ),
                     ),
-                    const SizedBox(width: 8),
+                    const SizedBox(width: 10),
                     Expanded(
                       child: Text(
                         protocol['name'],
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 16,
                         ),
                         overflow: TextOverflow.ellipsis,
                       ),
@@ -561,21 +563,44 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
               // Content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8),
+                  padding: const EdgeInsets.all(12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         protocol['description'],
-                        style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+                        style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      const Spacer(),
-                      _buildInfoRow('Age Range:', protocol['ageRange']),
-                      _buildInfoRow('Success Rate:', protocol['successRate']),
-                      _buildInfoRow('Duration:', protocol['duration']),
-                      _buildInfoRow('Risk Level:', protocol['riskLevel']),
+                      const SizedBox(height: 16),
+                      
+                      // Success Rate Graph
+                      const Text('Success Rate', style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.grey)),
+                      const SizedBox(height: 4),
+                      _buildSuccessRateBar(protocol['successRate'], primaryColor),
+                      
+                      const SizedBox(height: 12),
+                      
+                      // Stats Row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildStatItem(Icons.person_pin_outlined, protocol['ageRange'], 'Age'),
+                          _buildStatItem(Icons.timer_outlined, protocol['duration'], 'Duration'),
+                        ],
+                      ),
+                      
+                      const SizedBox(height: 12),
+                      
+                      // Risk Level
+                      Row(
+                        children: [
+                          const Text('Risk:', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                          const SizedBox(width: 8),
+                          _buildRiskBadge(protocol['riskLevel']),
+                        ],
+                      ),
                     ],
                   ),
                 ),
@@ -583,39 +608,26 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
               
               // Footer
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF8F6F3),
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(12),
-                    bottomRight: Radius.circular(12),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[50]!,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(16),
+                    bottomRight: Radius.circular(16),
                   ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${protocol['patientCount']} patients',
+                      '${protocol['patientCount']} Active Patients',
                       style: TextStyle(
-                        fontSize: 12,
-                        color: Colors.grey[600],
-                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
+                        color: Colors.grey[700],
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Icon(Icons.visibility_outlined, size: 16, color: Colors.grey[600]),
-                        const SizedBox(width: 4),
-                        Text(
-                          'View',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[600],
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
-                    ),
+                    Icon(Icons.arrow_forward, size: 16, color: Colors.grey[400]),
                   ],
                 ),
               ),
@@ -626,22 +638,85 @@ class _ProtocolsScreenState extends State<ProtocolsScreen> {
     );
   }
 
-  Widget _buildInfoRow(String label, String value) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2.0),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            label,
-            style: TextStyle(fontSize: 11, color: Colors.grey[600]),
-          ),
-          const SizedBox(width: 4),
-          Text(
-            value,
-            style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w500),
-          ),
-        ],
+  Widget _buildSuccessRateBar(String rate, Color color) {
+    double value = double.tryParse(rate.replaceAll('%', '')) ?? 0;
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: 6,
+              width: 140,
+              decoration: BoxDecoration(
+                color: Colors.grey[200],
+                borderRadius: BorderRadius.circular(3),
+              ),
+              child: FractionallySizedBox(
+                alignment: Alignment.centerLeft,
+                widthFactor: value / 100,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: color,
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                ),
+              ),
+            ),
+            Text(rate, style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: color)),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildStatItem(IconData icon, String value, String label) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 14, color: Colors.grey[600]),
+            const SizedBox(width: 4),
+            Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[500])),
+          ],
+        ),
+        Text(value, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
+      ],
+    );
+  }
+
+  Widget _buildRiskBadge(String level) {
+    Color color;
+    switch (level.toLowerCase()) {
+      case 'low':
+        color = const Color(0xFF7FB685);
+        break;
+      case 'medium':
+        color = const Color(0xFFE8C68E);
+        break;
+      case 'high':
+      case 'medium-high':
+        color = const Color(0xFFE89B8E);
+        break;
+      default:
+        color = Colors.grey;
+    }
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.3)),
+      ),
+      child: Text(
+        level,
+        style: TextStyle(
+          color: color,
+          fontSize: 12,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

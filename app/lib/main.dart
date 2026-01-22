@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+import 'providers/staff_provider.dart';
+import 'providers/settings_provider.dart';
 import 'screens/login_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/patients_screen.dart';
@@ -14,9 +17,18 @@ import 'screens/protocols_screen.dart';
 import 'screens/protocol_detail_screen.dart';
 import 'screens/medical_notes_screen.dart';
 import 'screens/appointment_form_screen.dart';
+import 'screens/staff_form_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => StaffProvider()),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -24,9 +36,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = Provider.of<SettingsProvider>(context);
+    
     return MaterialApp(
       title: 'IVF Clinic Dashboard',
       debugShowCheckedModeBanner: false,
+      themeMode: settings.isDarkMode ? ThemeMode.dark : ThemeMode.light,
       theme: ThemeData(
         useMaterial3: false,
         scaffoldBackgroundColor: const Color(0xFFF8F6F3),
@@ -59,18 +74,29 @@ class MyApp extends StatelessWidget {
             textStyle: const TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
           ),
         ),
-        inputDecorationTheme: InputDecorationTheme(
-          filled: true,
-          fillColor: Colors.white,
-          contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: BorderSide(color: const Color(0xFF6B6B6B).withOpacity(0.3)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(8),
-            borderSide: const BorderSide(color: Color(0xFF8BA888), width: 2),
-          ),
+      ),
+      darkTheme: ThemeData(
+        brightness: Brightness.dark,
+        useMaterial3: false,
+        scaffoldBackgroundColor: const Color(0xFF121212),
+        primaryColor: const Color(0xFF8BA888),
+        colorScheme: const ColorScheme.dark(
+          primary: Color(0xFF8BA888),
+          secondary: Color(0xFF6B9B9E),
+          surface: Color(0xFF1E1E1E),
+          onPrimary: Colors.white,
+          onSurface: Colors.white,
+          error: Color(0xFFE89B8E),
+        ),
+        textTheme: GoogleFonts.interTextTheme().apply(
+          bodyColor: Colors.white,
+          displayColor: Colors.white,
+        ),
+        cardTheme: CardTheme(
+          color: const Color(0xFF1E1E1E),
+          elevation: 0,
+          margin: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
       ),
       initialRoute: '/dashboard',
@@ -87,6 +113,7 @@ class MyApp extends StatelessWidget {
         '/lab_results': (context) => const LabResultsScreen(),
         '/messenger': (context) => const MessengerScreen(),
         '/staff': (context) => const StaffScreen(),
+        '/staff_form': (context) => const StaffFormScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/medical_notes': (context) => const MedicalNotesScreen(),
       },

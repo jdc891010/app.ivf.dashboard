@@ -182,45 +182,50 @@ class _DashboardScreenState extends State<DashboardScreen> {
  
 
   Widget _buildQuickStatsRow() {
-    return GridView.count(
-      crossAxisCount: 4,
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
-      shrinkWrap: true,
-      childAspectRatio: 1.0,
-      physics: const NeverScrollableScrollPhysics(),
+    return Row(
       children: [
-        _buildStatCard(
-          title: 'Total Patients',
-          value: _totalPatients.toString(),
-          icon: Icons.people_outlined,
-          color: Theme.of(context).primaryColor,
-          trend: '+12%',
-          isTrendPositive: true,
+        Expanded(
+          child: _buildStatCard(
+            title: 'Total Patients',
+            value: _totalPatients.toString(),
+            icon: Icons.people_outlined,
+            color: Theme.of(context).primaryColor,
+            trend: '12%',
+            isTrendPositive: true,
+          ),
         ),
-        _buildStatCard(
-          title: 'Active Treatments',
-          value: _activePatients.toString(),
-          icon: Icons.medical_services_outlined,
-          color: Theme.of(context).colorScheme.secondary,
-          trend: '+5%',
-          isTrendPositive: true,
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildStatCard(
+            title: 'Active Treatments',
+            value: _activePatients.toString(),
+            icon: Icons.medical_services_outlined,
+            color: Theme.of(context).colorScheme.secondary,
+            trend: '5%',
+            isTrendPositive: true,
+          ),
         ),
-        _buildStatCard(
-          title: 'Today\'s Appointments',
-          value: _todayAppointments.toString(),
-          icon: Icons.calendar_today_outlined,
-          color: Theme.of(context).colorScheme.onSurface,
-          trend: 'On Track',
-          isTrendPositive: true,
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildStatCard(
+            title: 'Today\'s Appointments',
+            value: _todayAppointments.toString(),
+            icon: Icons.calendar_today_outlined,
+            color: Theme.of(context).colorScheme.onSurface,
+            trend: 'On Track',
+            isTrendPositive: true,
+          ),
         ),
-        _buildStatCard(
-          title: 'Pending Results',
-          value: _pendingResults.toString(),
-          icon: Icons.science_outlined,
-          color: Colors.orange,
-          trend: '-2%',
-          isTrendPositive: false,
+        const SizedBox(width: 16),
+        Expanded(
+          child: _buildStatCard(
+            title: 'Pending Results',
+            value: _pendingResults.toString(),
+            icon: Icons.science_outlined,
+            color: Colors.orange,
+            trend: '2%',
+            isTrendPositive: false,
+          ),
         ),
       ],
     );
@@ -234,79 +239,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
     required String trend,
     required bool isTrendPositive,
   }) {
-    return Card(
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-        side: BorderSide(color: Colors.grey.withOpacity(0.2)),
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey.withOpacity(0.1)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: color.withValues(alpha: 0.1),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: color, size: 20),
-                ),
-                Flexible(
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: isTrendPositive
-                            ? const Color(0xFF7FB685).withValues(alpha: 0.1)
-                            : const Color(0xFFE89B8E).withValues(alpha: 0.1),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            isTrendPositive ? Icons.trending_up : Icons.trending_down,
-                            size: 14,
-                            color: isTrendPositive ? const Color(0xFF7FB685) : const Color(0xFFE89B8E),
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            trend,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
-                              color: isTrendPositive ? const Color(0xFF7FB685) : const Color(0xFFE89B8E),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(12),
             ),
-            Column(
+            child: Icon(icon, color: color, size: 24),
+          ),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  value,
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.onSurface,
-                    height: 1.2,
-                  ),
-                ),
-                const SizedBox(height: 4),
                 Text(
                   title,
                   style: TextStyle(
@@ -315,10 +277,65 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(height: 4),
+                Text(
+                  value,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                    height: 1.0,
+                  ),
+                ),
               ],
             ),
-          ],
-        ),
+          ),
+          if (trend != 'On Track')
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: isTrendPositive
+                    ? Colors.green.withOpacity(0.1)
+                    : Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    isTrendPositive ? Icons.arrow_upward : Icons.arrow_downward,
+                    size: 12,
+                    color: isTrendPositive ? Colors.green : Colors.red,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    trend,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                      color: isTrendPositive ? Colors.green : Colors.red,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          else
+             Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: Colors.blue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: const Text(
+                'On Track',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }

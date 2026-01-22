@@ -42,7 +42,36 @@ To test the application locally in Chrome:
 .\launch_local.ps1
 ```
 
+## 4. Linux / Cloudways Deployment (Persistent)
+
+If you are logged into your Linux server (e.g., via SSH on Cloudways), you can use the bash scripts for a complete setup and persistent deployment using PM2.
+
+### A. Install Requirements
+
+This script installs NVM, Node.js, PM2, and the Flutter SDK.
+
+```bash
+chmod +x scripts/install_requirements.sh
+./scripts/install_requirements.sh
+source ~/.bashrc
+```
+
+### B. Launch & Persistent Deploy
+
+This script builds the Flutter web app and uses PM2 to serve it. PM2 ensures the application stays running and restarts automatically if the server reboots.
+
+```bash
+chmod +x scripts/launch_app.sh
+./scripts/launch_app.sh
+```
+
+**Common PM2 Commands:**
+- `pm2 status`: View running processes.
+- `pm2 logs ivf-dashboard`: View application logs.
+- `pm2 stop ivf-dashboard`: Stop the application.
+
 ## Prerequisites
 
-- **Flutter SDK**: Must be installed and in your PATH.
-- **OpenSSH Client**: Included in Windows 10/11. Required for `scp` commands.
+- **Flutter SDK**: Must be installed (handled by `install_requirements.sh` on Linux).
+- **Node.js & PM2**: Required for persistent Linux deployment.
+- **OpenSSH Client**: Required for `scp` from local machines.
